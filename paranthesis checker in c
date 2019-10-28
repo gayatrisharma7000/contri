@@ -1,0 +1,75 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
+typedef struct stacknode{
+	char ch;
+	struct stacknode* next;
+}Stack;
+void push(Stack** head,char ch)
+{
+	Stack* temp=(Stack*)malloc(sizeof(Stack));
+	temp->ch=ch;
+	temp->next=*head;
+	*head=temp;
+}
+char pop(Stack** head)
+{
+	Stack* temp=NULL;
+	temp=*head;
+	*head=(*head)->next;
+	char symb=temp->ch;
+	free(temp);
+	return symb;
+}
+int prece(char ch)
+{
+	if(ch=='('||ch==')')
+		return 5;
+	else if(ch=='['||ch==']')
+		return 3;
+	else if(ch=='{'||ch=='}')
+		return 4;
+}
+int empty(Stack** head)
+{
+	if(*head==NULL)
+		return 1;
+	else
+		return 0;
+}
+void balanceparenthesis(Stack** head,char* arr)
+{
+	int i=0;char symb;bool valid=true;
+	while(arr[i]!='\0')
+	{
+		if(arr[i]=='('||arr[i]=='{'||arr[i]=='[')
+			push(head,arr[i]);
+		else if(arr[i]==')'||arr[i]=='}'||arr[i]==']'){
+                if(*head==NULL){
+                        valid=false;}
+                else{
+			symb=pop(head);
+			if(prece(symb)!=prece(arr[i])){
+				valid=false;
+				break;
+			}
+		}}
+		i++;
+	}
+	if(empty(head)==0)
+		valid=false;
+	if(valid==true)
+		printf("Symbols are balanced\n");
+	else if(valid==false)
+		printf("Symbols are not balanced\n");
+}
+int main()
+{
+	Stack* top=NULL;
+	char arr[30];
+	scanf("%s",arr);
+	balanceparenthesis(&top,arr);
+	return 0;
+}
+parenthesisbalancing.c
+Displaying parenthesisbalancing.c.
